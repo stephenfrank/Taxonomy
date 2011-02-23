@@ -156,6 +156,7 @@ class Taxonomy {
 		$options['path'] 			= NULL;
 		$options['url_title']  		= ($this->EE->TMPL->fetch_param('url_title')) ? $this->EE->TMPL->fetch_param('url_title') : NULL;
 		$options['auto_expand']  		= ($this->EE->TMPL->fetch_param('auto_expand')) ? $this->EE->TMPL->fetch_param('auto_expand') : "no";
+		$options['node_active_class']  	= ($this->EE->TMPL->fetch_param('node_active_class')) ? $this->EE->TMPL->fetch_param('node_active_class') : "active";
 
 		// if we've got a url title, set the root_entry_id var by
 		// doing a quick lookup for that entry - added by Todd Perkins

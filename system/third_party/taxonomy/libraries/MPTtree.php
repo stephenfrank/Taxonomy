@@ -2625,6 +2625,7 @@ function get_parents_crumbs($lft,$rgt){
 		$options['ul_css_class'] 	= ($options['ul_css_class'] ) ? $options['ul_css_class'] : NULL;
 		$options['hide_dt_group'] 	= ($options['hide_dt_group'] ) ? $options['hide_dt_group'] : NULL;
 		$options['auto_expand'] 	= ($options['auto_expand']) ? $options['auto_expand'] : NULL;
+		$options['node_active_class'] = ($options['node_active_class']) ? $options['node_active_class'] : 'active';
 				
 		$str = '';
 		$ul_id = '';
@@ -2678,7 +2679,7 @@ function get_parents_crumbs($lft,$rgt){
 			$active = '';
 			if($data['entry_id'] == $options['entry_id'] && $data['entry_id'] != '' && $options['entry_id'] != '')
 			{
-				$active = 'active';
+				$active = $options['node_active_class'];
 				// Added by @nevsie
 				$this->act_lev[$data['level']]['act_lft']	= $data['lft'];
 				$this->act_lev[$data['level']]['act_rgt']	= $data['rgt'];
@@ -2767,7 +2768,7 @@ function get_parents_crumbs($lft,$rgt){
 					
 					if($node_url === $viewed_url)
 					{
-						$active = 'active';
+						$active = $options['node_active_class'];
 					}
 					
 					$children = '';
