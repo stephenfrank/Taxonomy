@@ -2193,9 +2193,15 @@ ORDER BY {$this->left_col} DESC) as parent";
 				'.$this->tree_table.'.entry_id, 
 				'.$this->tree_table.'.template_path, 
 				'.$this->tree_table.'.custom_url, 
-				'.$this->tree_table.'.extra, 
+				'.$this->tree_table.'.extra, ';
 				
-				exp_channel_titles.entry_id, 
+			if($this->EE->input->get('method') == 'edit_nodes')
+			{
+				$query .=  'exp_statuses.status,
+							exp_statuses.highlight,';
+			}
+				
+			$query .=  'exp_channel_titles.entry_id, 
 				exp_channel_titles.channel_id, 
 				exp_channel_titles.title, 
 				exp_channel_titles.url_title, 
@@ -2218,6 +2224,13 @@ ORDER BY {$this->left_col} DESC) as parent";
 						
 						LEFT JOIN exp_template_groups
 						ON (exp_template_groups.group_id=exp_templates.group_id)';
+			
+			// are we in the cp? lets get status colors
+			if($this->EE->input->get('method') == 'edit_nodes')
+			{
+				$query .=  'LEFT JOIN exp_statuses
+							ON (exp_statuses.status=exp_channel_titles.status)';
+			}
 
 			$query .=	' WHERE ('.$this->left_col.
 						' BETWEEN '.$node[$this->left_col].
@@ -2311,7 +2324,6 @@ ORDER BY {$this->left_col} DESC) as parent";
     	
     	foreach($array as $data)
     	{
-    		
     		$node_id			= $data['node_id'];
     		$tree_id			= $this->EE->input->get('tree_id');
     		
@@ -2325,6 +2337,8 @@ ORDER BY {$this->left_col} DESC) as parent";
     		$custom_url			= (isset($data['custom_url'])) ? $data['custom_url'] : '';
     		$children 			= (isset($data['children'])) ? $data['children'] : '';
     		$label				= $data['label'];
+    		$highlight			= $data['highlight'];
+    		$status				= ($data['status'] && $data['status'] != 'open') ? '<em class="status_indicator" title="Status: '.ucfirst($data['status']).'" style="background-color: #'.$highlight.'">['.ucfirst($data['status']).']</em>' : '';
     		$site_url			= $this->EE->functions->fetch_site_index();
     		$level 				= $data['level'];
     		
@@ -2373,7 +2387,7 @@ ORDER BY {$this->left_col} DESC) as parent";
 			}
 			
 			$str .= $ind."	<div class='item-wrapper'><div class='item-handle'></div>\n";
-        	$str .= $ind."		<a href='$this->base&amp;method=manage_node&amp;node_id=$node_id&amp;tree_id=$tree_id'>$label</a>\n"; 
+        	$str .= $ind."		$status <a href='$this->base&amp;method=manage_node&amp;node_id=$node_id&amp;tree_id=$tree_id'>$label</a>\n"; 
         	$str .= $ind."		<div class='item-options'> \n";
 			if($data['entry_id'])
 			{

@@ -35,10 +35,17 @@ ol#taxonomy-list .item-options a.delete-node,
 #save-taxonomy {
 	-webkit-box-shadow: 0 0 3px rgba(0,0,0, 0.1);
 	-webkit-border-radius: 5px;
+	
+	-moz-box-shadow: 0 0 3px rgba(0,0,0, 0.1);
 	-moz-border-radius: 5px;
+	
+	box-shadow: 0 0 3px rgba(0,0,0, 0.1);
 	border-radius: 5px;
 }
 
+ol#taxonomy-list li div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 7px; width: 5px; height: 5px; border: 5px solid #fff; overflow: hidden; display: block; text-indent: -1000px; border-radius: 20px;opacity: 0.6; -webkit-background-clip: padding-box; }
+ol#taxonomy-list li div.item-wrapper:hover  em.status_indicator {opacity: 1}
+ol#taxonomy-list li div.item-wrapper em.status_indicator:hover{ }
 
 #mainContent .taxonomy-content #save-taxonomy {
 	padding-left: 10px;
@@ -222,6 +229,16 @@ table.taxonomy-table tr.odd td {background: #f6f6f6;}
 table.taxonomy-table th {background: #fff url(../gfx/item.png) repeat-x 0 100%; text-transform: uppercase; text-shadow: 0 1px 0 #fff; font-size: 9px; letter-spacing: 3px;}
 table.taxonomy-table th.options {width: 180px; white-space: nowrap;}
 table.taxonomy-table td input {border: 1px solid #e4e4e4;}
+
+.tipsy { padding: 5px; font-size: 10px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat;  background-image: url(../gfx/tipsy.gif); }
+  .tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+  .tipsy-inner { -moz-border-radius:3px; -webkit-border-radius:3px; -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.25)}
+  .tipsy-north { background-position: top center; }
+  .tipsy-south { background-position: bottom center; }
+  .tipsy-east { background-position: right center; }
+  .tipsy-west { background-position: left center; }
+
+
 
 
 
