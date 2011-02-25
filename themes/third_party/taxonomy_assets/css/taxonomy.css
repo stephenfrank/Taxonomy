@@ -43,7 +43,7 @@ ol#taxonomy-list .item-options a.delete-node,
 	border-radius: 5px;
 }
 
-ol#taxonomy-list li div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 7px; width: 5px; height: 5px; border: 5px solid #fff; overflow: hidden; display: block; text-indent: -1000px; border-radius: 20px;opacity: 0.6; -webkit-background-clip: padding-box; }
+ol#taxonomy-list li div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 7px; width: 5px; height: 5px; border: 5px solid transparent; overflow: hidden; display: block; text-indent: -1000px; opacity: 0.6; background-clip: padding-box; }
 ol#taxonomy-list li div.item-wrapper:hover  em.status_indicator {opacity: 1}
 ol#taxonomy-list li div.item-wrapper em.status_indicator:hover{ }
 
