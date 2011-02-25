@@ -2227,7 +2227,7 @@ ORDER BY {$this->left_col} DESC) as parent";
 			// nodes not attached to entries will have a NULL status
 			
 			
-			if($status_sql != 'ALL')
+			if($status_sql && $status_sql != 'ALL')
 			{
 				$query .= ' AND (exp_channel_titles.status IN ('.$status_sql.') OR exp_channel_titles.status IS NULL) ';
 			}
