@@ -2166,7 +2166,7 @@ ORDER BY {$this->left_col} DESC) as parent";
 	 * @param $root_node_id The node that shall be root in the tree that contains the node_id
 	 * @return A recursive array, false if the root node was not found
 	 */
-		function tree2array_v2($root = 1, $root_entry_id = NULL, $root_node_id = NULL)
+		function tree2array_v2($root = 1, $root_entry_id = NULL, $root_node_id = NULL, $status_sql = '')
 		{
 			
 			if($root_entry_id)
@@ -2183,8 +2183,6 @@ ORDER BY {$this->left_col} DESC) as parent";
 			}
 			if($node == false)
 				return false;
-				
-				
 				
 			// query
 			$query = 'SELECT 
@@ -2211,8 +2209,7 @@ ORDER BY {$this->left_col} DESC) as parent";
 				exp_template_groups.group_name,
 				exp_template_groups.is_site_default
 				
-				FROM '.$this->tree_table.
-					' 	
+				FROM '.$this->tree_table.' 	
 					LEFT JOIN exp_channel_titles
 						ON ('.$this->tree_table.'.entry_id=exp_channel_titles.entry_id)
 						
@@ -2221,15 +2218,19 @@ ORDER BY {$this->left_col} DESC) as parent";
 						
 						LEFT JOIN exp_template_groups
 						ON (exp_template_groups.group_id=exp_templates.group_id)';
-			
 
-	
-			$query .=	' WHERE '.$this->left_col.
+			$query .=	' WHERE ('.$this->left_col.
 						' BETWEEN '.$node[$this->left_col].
-						' AND '.$node[$this->right_col];
+						' AND '.$node[$this->right_col].')';
 			
-			// @todo add options to exclude status from nav
-			//$query .=	' AND exp_channel_titles.status != "closed"';
+			// add an extra sql statement for statuses,
+			// nodes not attached to entries will have a NULL status
+			
+			
+			if($status_sql != 'ALL')
+			{
+				$query .= ' AND (exp_channel_titles.status IN ('.$status_sql.') OR exp_channel_titles.status IS NULL) ';
+			}
 
 			$query .=	' GROUP BY '.$this->left_col.
 						' ORDER BY '.$this->left_col.' ASC';
@@ -2248,15 +2249,15 @@ ORDER BY {$this->left_col} DESC) as parent";
 			$row['level'] = $level;
 			
 				// go more shallow, if needed
-				if(count($right)){
-				
-					while($right[count($right)-1] < $row[$this->right_col]){
+				if(count($right) > 1){
+					
+					while($right[count($right)-1] < $row[$this->right_col])
+					{
 						$level = $level-1;
 						array_pop($right);
 						$row['level'] = $level;
 					}
 				}
-				
 
 				// Go one level deeper?
 				if(count($right) > $lastlevel){
@@ -2269,10 +2270,8 @@ ORDER BY {$this->left_col} DESC) as parent";
 					
 					$stack[count($right)] =& $current[key($current)]['children'];
 					$row['level'] = $level;
-					
 				}
 		
-				
 				// the stack contains all parents, current and maybe next level
 				$current =& $stack[count($right)];
 				// add the data
@@ -2281,13 +2280,7 @@ ORDER BY {$this->left_col} DESC) as parent";
 				
 				$lastlevel = count($right);
 				$right[] = $row[$this->right_col];
-				
-				
-
 			}
-			
-			
-			// print_r($result);
 			
 			return $result;
 		}
