@@ -157,31 +157,7 @@ class Taxonomy {
 		$options['url_title']  		= ($this->EE->TMPL->fetch_param('url_title')) ? $this->EE->TMPL->fetch_param('url_title') : NULL;
 		$options['auto_expand']  	= ($this->EE->TMPL->fetch_param('auto_expand')) ? $this->EE->TMPL->fetch_param('auto_expand') : "no";
 		$options['node_active_class']  	= ($this->EE->TMPL->fetch_param('node_active_class')) ? $this->EE->TMPL->fetch_param('node_active_class') : "active";
-		$options['entry_status']  	= ($this->EE->TMPL->fetch_param('entry_status')) ? $this->EE->TMPL->fetch_param('entry_status') : "open";
-		
-		
-		// filtering by status
-		// produces sql to go into IN() on tree2array_v2 in MPTtree
-		// eg, 'open', 'closed'
-		// we give all to pro
-		$status_sql = '';
-		if($options['entry_status'] != "ALL")
-		{
-			$status_filter = explode('|', $options['entry_status']);
-			if(is_array($status_filter))
-			{
-				foreach($status_filter as $status)
-				{
-					$status_sql .= "'".$status."',";
-				}
-			}
-			$status_sql = rtrim($status_sql, ',');
-			// --- end filtering by status
-		}
-		else
-		{
-			$status_sql = 'ALL';
-		}
+		$options['entry_status']  	= ($this->EE->TMPL->fetch_param('entry_status')) ? explode('|', $this->EE->TMPL->fetch_param('entry_status')) : array('open');
 
 		// if we've got a url title, set the root_entry_id var by
 		// doing a quick lookup for that entry - added by Todd Perkins
@@ -213,7 +189,7 @@ class Taxonomy {
 			}
 		}
 
-		$tree_array = $this->EE->mpttree->tree2array_v2($options['root'], $options['root_entry_id'], $options['root_node_id'], $status_sql);
+		$tree_array = $this->EE->mpttree->tree2array_v2($options['root'], $options['root_entry_id'], $options['root_node_id']);
 
 		return $this->EE->mpttree->build_list($tree_array, $str, $options);
 		
