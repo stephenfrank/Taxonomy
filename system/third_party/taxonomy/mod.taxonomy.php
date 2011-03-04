@@ -196,20 +196,54 @@ class Taxonomy {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	 
-	
-	
-	
-	
-	
+
+	// returns either the root node label, 
+	// or the uppermost label of a node's branch if a node id, or node entry id is passed
+	function branch_title()
+	{
+		$tree = $this->EE->TMPL->fetch_param('tree_id');
+		
+		if ( ! $this->check_taxonomy_table_exists($tree))
+			return false;
+		
+		$this->EE->load->library('MPTtree');
+		$this->EE->mpttree->set_opts(array( 'table' => 'exp_taxonomy_tree_'.$tree,
+										'left' => 'lft',
+										'right' => 'rgt',
+										'id' => 'node_id',
+										'title' => 'label'));
+										
+		$node_id 		= $this->EE->TMPL->fetch_param('node_id');
+		$node_entry_id 	= $this->EE->TMPL->fetch_param('node_entry_id');
+		$data = array();
+		
+		if(!$node_id && !$node_entry_id)
+		{
+			$data = $this->EE->mpttree->get_root();
+			return (isset($data['label'])) ? $data['label'] : '';
+		}
+		
+		if($node_id)
+		{
+			$data = $this->EE->mpttree->get_node_by_nodeid($node_id);
+		}
+		
+		if($node_entry_id)
+		{
+			$data = $this->EE->mpttree->get_node_by_entry_id($node_entry_id);
+		}
+			
+		$parents = $this->EE->mpttree->get_parents_crumbs($data['lft'],$data['rgt']);
+		if(!isset($parents[1]['label']))
+		{
+			return (isset($data['label'])) ? $data['label'] : '';
+		}
+		else
+		{
+			return $parents[1]['label'];
+		}
+		
+	}
 	
 	
 	
