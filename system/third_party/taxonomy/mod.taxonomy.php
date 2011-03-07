@@ -158,6 +158,9 @@ class Taxonomy {
 		$options['auto_expand']  	= ($this->EE->TMPL->fetch_param('auto_expand')) ? $this->EE->TMPL->fetch_param('auto_expand') : "no";
 		$options['node_active_class']  	= ($this->EE->TMPL->fetch_param('node_active_class')) ? $this->EE->TMPL->fetch_param('node_active_class') : "active";
 		$options['entry_status']  	= ($this->EE->TMPL->fetch_param('entry_status')) ? explode('|', $this->EE->TMPL->fetch_param('entry_status')) : array('open');
+		$options['style']  			= ($this->EE->TMPL->fetch_param('style')) ? $this->EE->TMPL->fetch_param('style') : "nested";
+		
+		echo $options['style'];
 
 		// if we've got a url title, set the root_entry_id var by
 		// doing a quick lookup for that entry - added by Todd Perkins

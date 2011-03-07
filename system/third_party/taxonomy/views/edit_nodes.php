@@ -16,6 +16,9 @@
 			toleranceElement: '> div'
 			
 		});
+		
+		// fix the tree height to prevent any 'jumping'
+		$('ol#taxonomy-list').height($('ol#taxonomy-list').height());
 
 		$( "ol#taxonomy-list" ).bind( "sortupdate", function(event, ui) {
 		

@@ -13,7 +13,7 @@
  */
 class Taxonomy_upd {
 
-	var $version        = '1.2.1';
+	var $version        = '1.2.2';
 	var $module_name 	= "Taxonomy";
 	
 	function __construct() 

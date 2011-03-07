@@ -1,12 +1,9 @@
 
-#taxonomy-wrapper {}
-#taxonomy-output {}
 
 .taxonomy-content {
-	
-	padding-bottom: 40px;
+	padding-bottom: 20px;
 	font-family: Helvetica, Arial, sans-serif;
-
+	margin: 10px 20px;
 }
 
 #mainContent .taxonomy-content p {margin-bottom: 15px;}
@@ -43,7 +40,16 @@ ol#taxonomy-list .item-options a.delete-node,
 	border-radius: 5px;
 }
 
-ol#taxonomy-list li div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 7px; width: 5px; height: 5px; border: 5px solid transparent; overflow: hidden; display: block; text-indent: -1000px; opacity: 0.6; background-clip: padding-box; }
+ol#taxonomy-list li div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 7px; width: 5px; height: 5px; border: 5px solid transparent; overflow: hidden; display: block; text-indent: -1000px; opacity: 0.6; 
+-moz-background-clip: border; /* Firefox 3.6 */
+-webkit-background-clip: border; /* Safari 4? Chrome 6? */
+background-clip: border-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+-moz-background-clip: padding; /* Firefox 3.6 */
+-webkit-background-clip: padding; /* Safari 4? Chrome 6? */
+background-clip: padding-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+-moz-background-clip: content; /* Firefox 3.6 */
+-webkit-background-clip: content; /* Safari 4? Chrome 6? */
+background-clip: content-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */}
 ol#taxonomy-list li div.item-wrapper:hover  em.status_indicator {opacity: 1}
 ol#taxonomy-list li div.item-wrapper em.status_indicator:hover{ }
 

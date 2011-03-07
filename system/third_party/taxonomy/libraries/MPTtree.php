@@ -2626,6 +2626,7 @@ function get_parents_crumbs($lft,$rgt){
 		$options['auto_expand'] 	= ($options['auto_expand']) ? $options['auto_expand'] : NULL;
 		$options['node_active_class'] = ($options['node_active_class']) ? $options['node_active_class'] : 'active';
 		$options['entry_status'] 	= ($options['entry_status']) ? $options['entry_status'] : array('open');
+		$options['style'] 			= ($options['style']) ? $options['style'] : 'nested';
 						
 		$str = '';
 		$ul_id = '';
@@ -2646,8 +2647,8 @@ function get_parents_crumbs($lft,$rgt){
 			$ul_class = ' class="'.$options['ul_css_class'].'"';
 		}
 		
-    	$opening_ul = "<ul".$ul_id.$ul_class.">\n";		
-		$closing_ul = "</ul>\n";
+    	$opening_ul = ($options['style'] == 'nested') ? "<ul".$ul_id.$ul_class.">\n" : '';		
+		$closing_ul = ($options['style'] == 'nested') ? "</ul>\n" : '';
 		
 		// Added by @nevsie
 		$level_count = 0;
@@ -2847,7 +2848,7 @@ function get_parents_crumbs($lft,$rgt){
 						// get rid of any space on the end
 						$node_class = rtrim($node_class, " ");
 											
-						$str .= '<li class="'.$node_class.'">';
+						$str .= ($options['style'] == 'nested') ? '<li class="'.$node_class.'">' : '';
 						$str .= "";
 						$str .= $this->EE->functions->var_swap($tmp, $variables);
 						
@@ -2861,7 +2862,7 @@ function get_parents_crumbs($lft,$rgt){
 							$str .= $this->EE->mpttree->build_list($data['children'], $tagdata, $options);
 						}
 						
-						$str .= "   </li>\n";
+						$str .= ($options['style'] == 'nested') ? "   </li>\n" : '';
 						
 					}
 					else
