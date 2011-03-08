@@ -2320,7 +2320,7 @@ ORDER BY {$this->left_col} DESC) as parent";
     		$tree_id			= $this->EE->input->get('tree_id');
     		
     		// if the template group is the site default, hide it.
-    		$template_group 	= ($data['is_site_default'] !='y') ? '/'.$data['group_name'] : ''; 
+    		$template_group 	= '/'.$data['group_name']; 
     		
     		// hide /index templates from the urls
     		$template_name		= ($data['template_name'] != 'index') ? '/'.$data['template_name'] : '';
@@ -2735,7 +2735,7 @@ function get_parents_crumbs($lft,$rgt){
 					{
 						
 						// remove default template group segments
-						$template_group = ($data['is_site_default'] == 'y') ? '' : '/'.$data['group_name'];
+						$template_group = ($data['is_site_default'] == 'y' && $options['hide_dt_group'] == 'yes') ? '' : '/'.$data['group_name'];
 						$template_name = 	'/'.$data['template_name']; 
 						$url_title = 		'/'.$data['url_title'];
 						
