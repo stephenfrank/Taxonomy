@@ -2662,12 +2662,12 @@ function get_parents_crumbs($lft,$rgt){
     	foreach($array as $data)
 	    {    
 	    
-			$options['node_count'] = $this->cache['taxonomy_node_count']++;
+			
 			
 			// only parse items with selected statuses
 	    	if(($data['status'] == "" ||  in_array($data['status'], $options['entry_status'])) || ($options['entry_status'] == array('ALL')))
 	    	{
-
+				$options['node_count'] = $this->cache['taxonomy_node_count']++;
 		    	$active_parent = '';
 		    	$level_count++;
 
