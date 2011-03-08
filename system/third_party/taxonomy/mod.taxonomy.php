@@ -192,7 +192,15 @@ class Taxonomy {
 
 		$tree_array = $this->EE->mpttree->tree2array_v2($options['root'], $options['root_entry_id'], $options['root_node_id']);
 
-		return $this->EE->mpttree->build_list($tree_array, $str, $options);
+		$r = $this->EE->mpttree->build_list($tree_array, $str, $options);
+		
+		// unset the node_count incase multiple trees are being output
+		if (isset($this->EE->session->cache['taxonomy_node_count']))
+		{
+			$this->EE->session->cache['taxonomy_node_count'] = 1;
+		}
+		
+		return $r;
 		
 	}
 	

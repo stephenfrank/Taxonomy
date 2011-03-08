@@ -2628,9 +2628,9 @@ function get_parents_crumbs($lft,$rgt){
 		$options['entry_status'] 	= ($options['entry_status']) ? $options['entry_status'] : array('open');
 		$options['style'] 			= ($options['style']) ? $options['style'] : 'nested';
 		
-		if (! isset($this->cache['taxonomy_node_count']))
+		if (! isset($this->EE->session->cache['taxonomy_node_count']))
 		{
-			$this->cache['taxonomy_node_count'] = 1;
+			$this->EE->session->cache['taxonomy_node_count'] = 1;
 		}
 
 		$str = '';
@@ -2667,7 +2667,7 @@ function get_parents_crumbs($lft,$rgt){
 			// only parse items with selected statuses
 	    	if(($data['status'] == "" ||  in_array($data['status'], $options['entry_status'])) || ($options['entry_status'] == array('ALL')))
 	    	{
-				$options['node_count'] = $this->cache['taxonomy_node_count']++;
+				
 		    	$active_parent = '';
 		    	$level_count++;
 
@@ -2704,8 +2704,11 @@ function get_parents_crumbs($lft,$rgt){
 	    		 $closing_ul = '';
 	    		}
 	    		
+	    		
+	    		
 	    		else
 	    		{
+	    			$options['node_count'] = $this->EE->session->cache['taxonomy_node_count']++;
 	    			// move onwards only if autoexpand is no, or level = 0, or we're on a sibling of an active branch/node using autoexpand=yes
 					if (	$options['auto_expand'] == 'no'
 							||
