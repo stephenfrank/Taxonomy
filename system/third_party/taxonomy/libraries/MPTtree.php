@@ -2627,7 +2627,12 @@ function get_parents_crumbs($lft,$rgt){
 		$options['node_active_class'] = ($options['node_active_class']) ? $options['node_active_class'] : 'active';
 		$options['entry_status'] 	= ($options['entry_status']) ? $options['entry_status'] : array('open');
 		$options['style'] 			= ($options['style']) ? $options['style'] : 'nested';
-						
+		
+		if (! isset($this->cache['taxonomy_node_count']))
+		{
+			$this->cache['taxonomy_node_count'] = 1;
+		}
+
 		$str = '';
 		$ul_id = '';
 		$ul_class = '';
@@ -2656,14 +2661,16 @@ function get_parents_crumbs($lft,$rgt){
 		
     	foreach($array as $data)
 	    {    
-									
+	    
+			$options['node_count'] = $this->cache['taxonomy_node_count']++;
+			
 			// only parse items with selected statuses
 	    	if(($data['status'] == "" ||  in_array($data['status'], $options['entry_status'])) || ($options['entry_status'] == array('ALL')))
 	    	{
 
 		    	$active_parent = '';
-		    	$level_count ++;
-		    	
+		    	$level_count++;
+
 		    	// flag active parents
 		    	if($options['path'])
 				{
@@ -2813,8 +2820,10 @@ function get_parents_crumbs($lft,$rgt){
 											'node_next_child' => $data['lft']+1,
 											'node_level' => $data['level'],
 											'node_level_count' => $level_count,
-											'node_level_total_count' => $level_total_count 
+											'node_level_total_count' => $level_total_count,
+											'node_count' => $options['node_count']
 											);
+						
 						
 						$custom_fields = (isset($data['extra'])) ? unserialize($data['extra']) : NULL;
 						
@@ -2841,7 +2850,7 @@ function get_parents_crumbs($lft,$rgt){
 						}
 						
 						$level = $data['level'];
-						
+
 						// build our node class and remove any extra spaces
 						$node_class = preg_replace('/\s\s+/', ' ', "node_$unique_class level_$level $children_class $active_parent $active");
 						
@@ -2877,6 +2886,8 @@ function get_parents_crumbs($lft,$rgt){
         } // end foreach $array as $data
            
         $str = $opening_ul.$str.$closing_ul;
+        
+        
         
    	 	return $str;
     }
