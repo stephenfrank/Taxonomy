@@ -417,6 +417,13 @@ class Taxonomy {
 		$entry_id = $this->EE->TMPL->fetch_param('entry_id');
 		$include_current = $this->EE->TMPL->fetch_param('include_current');
 		
+		$this->EE->load->library('MPTtree');
+		$this->EE->mpttree->set_opts(array( 'table' => 'exp_taxonomy_tree_'.$tree,
+											'left' => 'lft',
+											'right' => 'rgt',
+											'id' => 'node_id',
+											'title' => 'label'));
+		
 		// where are we
 		$here = $this->EE->mpttree->get_node_by_entry_id($entry_id);
 				
