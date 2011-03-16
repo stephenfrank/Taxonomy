@@ -333,9 +333,12 @@
 
 			$return .= '
 					<table class="mainTable taxonomy_table" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px;">
+					<thead>
 							<tr>
 								<th colspan="2">'.$this->EE->lang->line('node_properties').'</th>
-							</tr>';
+							</tr>
+					</thead>
+					<tbody>';
 
 			$return .= '	<tr>
 								<td style="width: 140px;"><strong>'.$this->EE->lang->line('node_label').'</strong> <span class="taxonomy_fetch_title" title="'.$this->EE->lang->line('fetch_title').'">+</span></td>
@@ -433,7 +436,7 @@
 				// $return .= '<tr><td>'.lang('path_to_here').'</td><td>'.$breadcrumb.'</td></tr>';
 			}
 			
-			$return .= '</table>'. $hidden_custom_fields;
+			$return .= '</tbody></table>'. $hidden_custom_fields;
 					
 			
 			return $return;
