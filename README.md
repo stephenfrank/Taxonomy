@@ -7,23 +7,21 @@ The Taxonomy Module is a navigation/breadcrumb building tool for 'page' sections
 Taxonomy lets you build navigation trees to unlimited depths which comprise of any of the following types of links:
 
 1. Build links in your tree which use regular template_group/url_title or template_group/template/url_title paths
-2. Build links in your tree from entries using page uris from the EE Pages Module (NEW!)
-3. Or enter a url override to build nodes in your tree that link to anywhere you like!
+2. Build links in your tree from entries using page uris from the EE Pages Module
+3. Or enter a url override to build nodes in your tree that link to anywhere you like
 
 The module comes bundled with a fieldtype to allow publishers to insert menu items directly from the publish page.
 
-To get a quick overview of the module, please [checkout the screencast](http://vimeo.com/16276505) and be sure to check out the [Quick Start Guide](http://iain.co.nz/taxonomy/quick_start/).
-
-Taxonomy also allows you to create as many trees as you need to handle multiple menus.
+Taxonomy allows you to create as many trees as you need to handle multiple menus.
 
 ### Documentation
-Docs can be found at [http://iain.co.nz/taxonomy/](http://iain.co.nz/taxonomy/)
+Docs can be found at [http://iain.co.nz/software/docs/taxonomy](http://iain.co.nz/software/docs/taxonomy)
 
 ### Donations
 
 You can use all my code without paying anything! Having said that, a lot of work has gone into creating this module. If my code saves you some time and trouble, and you feel like making a small donation to support my future development efforts, it would be very much appreciated.
 
-[Make a donation via PayPal](http://iain.co.nz/donate/)
+Make a donation via [the donate function](http://iain.co.nz/software) on my site, payments are via PayPal
 
 ### License / Disclaimer
 
