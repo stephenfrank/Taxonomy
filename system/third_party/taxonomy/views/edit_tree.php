@@ -4,6 +4,7 @@
 
 	$selected_templates = explode('|', $tree_info['template_preferences']);
 	$selected_channels = explode('|', $tree_info['channel_preferences']);
+	$permissions = explode('|', $tree_info['permissions']);
 	
 	$this->table->set_template($cp_table_template);
 	$this->table->set_heading(
@@ -26,6 +27,14 @@
 	lang('channel_preferences'),
 	form_multiselect('channel_preferences[]', $channels, $selected_channels, 'class="taxonomy-multiselect"')	
 	);
+	
+	if(count($member_groups))
+	{
+		$this->table->add_row(
+		lang('member_preferences'),
+		form_multiselect('member_group_preferences[]', $member_groups, $permissions, 'class="taxonomy-multiselect"')	
+		);
+	}
 
 	echo $this->table->generate();
 	$this->table->clear(); // needed to reset the table

@@ -54,12 +54,21 @@ class Taxonomy_mcp
 		{
 			foreach ($query->result_array() as $row)
 			{
-				$vars['trees'][$row['id']]['id'] = $row['id'];
-				$vars['trees'][$row['id']]['site_id'] = $row['site_id'];
-				$vars['trees'][$row['id']]['tree_label'] = $row['label'];
-				$vars['trees'][$row['id']]['edit_tree_link'] = $this->base.AMP.'method=edit_tree'.AMP.'tree_id='.$row['id'];
-				$vars['trees'][$row['id']]['edit_nodes_link'] = $this->base.AMP.'method=edit_nodes'.AMP.'tree_id='.$row['id'];
-				$vars['trees'][$row['id']]['delete_tree_link'] = $this->base.AMP.'method=delete_tree'.AMP.'tree_id='.$row['id'];
+			
+				$permissions = explode('|', $row['permissions']);
+				$current_user_group_id = $this->EE->session->userdata['group_id'];
+				
+				// do we have parmissions to view this row/tree? bypass for superadmin
+				if(in_array($current_user_group_id, $permissions) || ($this->EE->session->userdata['group_id'] == 1))
+				{
+			
+					$vars['trees'][$row['id']]['id'] = $row['id'];
+					$vars['trees'][$row['id']]['site_id'] = $row['site_id'];
+					$vars['trees'][$row['id']]['tree_label'] = $row['label'];
+					$vars['trees'][$row['id']]['edit_tree_link'] = $this->base.AMP.'method=edit_tree'.AMP.'tree_id='.$row['id'];
+					$vars['trees'][$row['id']]['edit_nodes_link'] = $this->base.AMP.'method=edit_nodes'.AMP.'tree_id='.$row['id'];
+					$vars['trees'][$row['id']]['delete_tree_link'] = $this->base.AMP.'method=delete_tree'.AMP.'tree_id='.$row['id'];
+				}
 			}
 		}
 		else
@@ -79,6 +88,7 @@ class Taxonomy_mcp
 
 		$this->EE->load->helper(array('form', 'string', 'url'));
 		$this->EE->load->library('table');
+		$this->EE->load->library('MPTtree');
 		$this->EE->load->model('tools_model');
 		$this->_add_taxonomy_assets();
 
@@ -115,6 +125,21 @@ class Taxonomy_mcp
 		{
 			$vars['channels'][$channel['channel_id']] = $channel['channel_title'];
 		}
+		
+		// get the member groups available
+		$this->EE->load->model('member_model');
+		$member_groups = $this->EE->member_model->get_member_groups();
+		
+		$vars['member_groups'] = array();
+		
+		foreach($member_groups->result_array() as $member_group)
+		{
+			// only add to the array if the member group can access taxonomy 
+			if( $this->EE->mpttree->can_access_taxonomy($member_group['group_id']) )
+			{
+				$vars['member_groups'][$member_group['group_id']] = $member_group['group_title'];
+			}
+		}
 
 		return $this->content_wrapper('add_tree', 'add_tree', $vars);
 
@@ -133,11 +158,14 @@ class Taxonomy_mcp
 		
 		$template_preferences = "";
 		$channel_preferences = "";
-		$tree_id = ($this->EE->input->post('id')) ? $this->EE->input->post('id') : '';
+		$tree_id = $this->EE->input->post('id');
 		$label = $this->EE->input->post('label');
 		$fields = $this->EE->input->post('field');
+		
+		
 		$tp_prefs_array = ($this->EE->input->post('template_preferences')) ? $this->EE->input->post('template_preferences') : "|";
 		$cnl_prefs_array = ($this->EE->input->post('channel_preferences')) ? $this->EE->input->post('channel_preferences') : "|";
+		$permissions = ($this->EE->input->post('member_group_preferences')) ? $this->EE->input->post('member_group_preferences') : "|";
 		
 		$new = ($tree_id != "") ? NULL : 1;
 		
@@ -149,6 +177,11 @@ class Taxonomy_mcp
 		if(is_array($cnl_prefs_array))
 		{
 			$channel_preferences .= implode('|', $cnl_prefs_array);
+		}
+		
+		if(is_array($permissions))
+		{
+			$permissions = implode('|', $permissions);
 		}
 		
 		$field_prefs = array();
@@ -172,7 +205,8 @@ class Taxonomy_mcp
 						'label'					=> $label,
 						'template_preferences'	=> $template_preferences,
 						'channel_preferences' 	=> $channel_preferences,
-						'extra'					=> $field_prefs
+						'extra'					=> $field_prefs,
+						'permissions'			=> $permissions
 						);
 		
 		$data = $this->EE->security->xss_clean($data);
@@ -282,6 +316,7 @@ class Taxonomy_mcp
 			$vars['tree_info']['template_preferences'] = $row->template_preferences;
 			$vars['tree_info']['channel_preferences'] = $row->channel_preferences;
 			$vars['tree_info']['extra'] = ($row->extra != '') ? unserialize($row->extra) : '';
+			$vars['tree_info']['permissions'] = $row->permissions;
 		}
 		
 		if(is_array($vars['tree_info']['extra']))
@@ -304,6 +339,21 @@ class Taxonomy_mcp
 		foreach($channels->result_array() as $channel)
 		{
 			$vars['channels'][$channel['channel_id']] = $channel['channel_title'];
+		}
+		
+		// get the member groups available
+		$this->EE->load->model('member_model');
+		$member_groups = $this->EE->member_model->get_member_groups();
+		
+		$vars['member_groups'] = array();
+		
+		foreach($member_groups->result_array() as $member_group)
+		{
+			// only add to the array if the member group can access taxonomy 
+			if( $this->EE->mpttree->can_access_taxonomy($member_group['group_id']) )
+			{
+				$vars['member_groups'][$member_group['group_id']] = $member_group['group_title'];
+			}
 		}
 		
 		return $this->content_wrapper('edit_tree', 'edit_tree', $vars);
@@ -870,7 +920,22 @@ class Taxonomy_mcp
 		}
 		
 		// check the tree table exists
-		if (!$this->EE->db->table_exists('exp_taxonomy_tree_'.$tree_id))
+		if ($this->EE->db->table_exists('exp_taxonomy_tree_'.$tree_id))
+		{
+			
+			$this->get_tree_settings($tree_id);
+			
+			$permissions = ( isset($this->EE->session->cache['taxonomy']['tree'][$tree_id]['settings']['permissions']) ) ? 
+							explode('|', $this->EE->session->cache['taxonomy']['tree'][$tree_id]['settings']['permissions']) : '';
+			
+			if(!in_array($this->EE->session->userdata['group_id'], $permissions) && ($this->EE->session->userdata['group_id'] != 1))
+		    {
+		    	$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('unauthorized'));
+				$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=taxonomy');
+		    }
+
+		}
+		else
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_such_tree'));
 			$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=taxonomy');
@@ -929,6 +994,7 @@ class Taxonomy_mcp
 				$tree_info['channel_preferences'] = $row->channel_preferences;
 				$tree_info['last_updated'] = $row->last_updated;
 				$tree_info['extra'] = $row->extra;
+				$tree_info['permissions'] = $row->permissions;
 			}
 			
 			$this->EE->session->cache['taxonomy']['tree'][$id]['settings'] = $tree_info;

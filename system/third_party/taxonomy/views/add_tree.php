@@ -25,6 +25,14 @@
 	form_multiselect('channel_preferences[]', $channels, '', 'class="taxonomy-multiselect"')	
 	);
 
+	if(count($member_groups))
+	{
+		$this->table->add_row(
+		lang('member_preferences'),
+		form_multiselect('member_group_preferences[]', $member_groups, '', 'class="taxonomy-multiselect"')	
+		);
+	}
+
 	echo $this->table->generate();
 	$this->table->clear(); // needed to reset the table
 ?>

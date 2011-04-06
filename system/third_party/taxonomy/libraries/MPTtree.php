@@ -2895,6 +2895,30 @@ function get_parents_crumbs($lft,$rgt){
    	 	return $str;
     }
     
+    
+    
+    // checks if a member group can access Taxonomy
+    function can_access_taxonomy($group_id = '')
+	{	
+
+		$this->EE->db->select('modules.module_id, module_member_groups.group_id');
+		$this->EE->db->where('LOWER('.$this->EE->db->dbprefix.'modules.module_name)', 'taxonomy');
+		$this->EE->db->join('module_member_groups', 'module_member_groups.module_id = modules.module_id');
+		$this->EE->db->where('module_member_groups.group_id', $group_id);
+		
+		$query = $this->EE->db->get('modules');
+
+		if ($query->num_rows() == 0)
+		{
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+
+	}
+    
  
  
  	// lifted straight from the allow EE code plugin...

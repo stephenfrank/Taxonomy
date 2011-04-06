@@ -79,6 +79,7 @@ $lang = array(
 "advanced_settings_instructions" => 'Custom fields are optional, and will appear to publishers when editing nodes via the module interface.<br />By selecting "Display on publish?" the field will appear on the Taxonomy Fieldtype too.<br />To remove a row, leave the \'Field short name\' blank and save.',
 "root_node_notice"				=> '<h3>Please insert a root node<br /><small>All Taxonomy trees must have a root node</small></h3>',
 "field_notice"					=> 'Please note: Changing a \'Field Name\' will not update already existing values if they have been entered.',
+"member_preferences"			=> '<strong>Member preferences</strong><br />Which member groups have access to this tree via the module interface. (Super Admins always have access)',
 //
 ''=>''
 );

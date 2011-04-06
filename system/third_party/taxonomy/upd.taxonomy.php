@@ -13,7 +13,7 @@
  */
 class Taxonomy_upd {
 
-	var $version        = '1.2.2';
+	var $version        = '1.2.3';
 	var $module_name 	= "Taxonomy";
 	
 	function __construct() 
@@ -245,6 +245,14 @@ class Taxonomy_upd {
 				}
 			}
 	
+		}
+		
+		
+		if ($current < '1.2.3') 
+		{
+			$this->EE->load->dbforge();
+			$fields = array('permissions' => array('type' => 'varchar','constraint' => '250'));
+			$this->EE->dbforge->add_column('taxonomy_trees', $fields);
 		}
 
 		

@@ -7,7 +7,7 @@
 }
 
 #mainContent .taxonomy-content p {margin-bottom: 15px;}
-#mainContent .taxonomy-moltiselect {width: 100%; padding: 10px;}
+#mainContent .taxonomy-multiselect {width: 60%; padding: 3px;}
 #mainContent .taxonomy-select {width: 100%;}
 
 .taxonomy-select-entry,
