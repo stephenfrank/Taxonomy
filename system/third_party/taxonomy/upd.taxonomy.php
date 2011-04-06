@@ -69,7 +69,10 @@ class Taxonomy_upd {
 						'pages_mode' 			=> array('type'	=> 'int', 
 											 			 'constraint' => '1'),
 											 			 
-			 			 'extra' 			=> array('type'	=> 'text')
+			 			 'extra' 			=> array('type'	=> 'text'),
+			 			 
+			 			 'permissions'		=> array('type' => 'varchar',
+											 		 'constraint' => '250')
 						);
 
 		$this->EE->dbforge->add_field($fields);
