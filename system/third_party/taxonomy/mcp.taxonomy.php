@@ -64,10 +64,11 @@ class Taxonomy_mcp
 			{
 			
 				$permissions = explode('|', $row['permissions']);
+								
 				$current_user_group_id = $this->EE->session->userdata['group_id'];
 				
 				// do we have parmissions to view this row/tree? bypass for superadmin
-				if(in_array($current_user_group_id, $permissions) || ($this->EE->session->userdata['group_id'] == 1))
+				if(is_array($permissions) && (in_array($current_user_group_id, $permissions) || ($this->EE->session->userdata['group_id'] == 1)))
 				{
 			
 					$vars['trees'][$row['id']]['id'] = $row['id'];
@@ -940,7 +941,7 @@ class Taxonomy_mcp
 			$permissions = ( isset($this->EE->session->cache['taxonomy']['tree'][$tree_id]['settings']['permissions']) ) ? 
 							explode('|', $this->EE->session->cache['taxonomy']['tree'][$tree_id]['settings']['permissions']) : '';
 			
-			if(!in_array($this->EE->session->userdata['group_id'], $permissions) && ($this->EE->session->userdata['group_id'] != 1))
+			if(is_array($permissions) && !in_array($this->EE->session->userdata['group_id'], $permissions) && ($this->EE->session->userdata['group_id'] != 1))
 		    {
 		    	$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('unauthorized'));
 				$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=taxonomy');
