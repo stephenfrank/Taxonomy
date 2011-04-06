@@ -26,12 +26,20 @@ class Taxonomy_mcp
 		$this->form_base 	= 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->module_name;
 		$this->theme_base 	= $this->EE->config->item('theme_folder_url').'third_party/taxonomy_assets/';
 		$this->site_id	 	= $this->EE->config->item('site_id');
-
-        // set the top nav
-		$this->EE->cp->set_right_nav(array(
+		
+		// set the top nav
+		$nav_array = array(
 				'module_home'	=> $this->base,
-				'add_tree'		=> $this->base.AMP.'method=add_tree'
-			));
+				'add_tree'		=> $this->base.AMP.'method=add_tree');
+        
+        // remove the add_tree option for non super admins * @todo
+        if($this->EE->session->userdata['group_id'] != 1)
+        {
+        	// unset($nav_array['add_tree']);
+        }
+		
+		$this->EE->cp->set_right_nav($nav_array);
+		
 			
 	}
 
@@ -105,21 +113,24 @@ class Taxonomy_mcp
 			$this->EE->functions->redirect($this->base);
 		}
 		
+		
+		
 		foreach($templates->result_array() as $template)
 		{
 			$vars['templates'][$template['template_id']] = '/'.$template['group_name'].'/'.$template['template_name'].'/';
 		}
 
 		// get the channels available
-		$this->EE->load->model('channel_model');
-		$channels = $this->EE->channel_model->get_channels($this->site_id);
-
+		$channels = $this->EE->mpttree->get_channels($this->site_id);
+		
 		// no channels?	
 		if ($channels->num_rows() == 0)
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_channels_exist'));
 			$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=taxonomy');
 		}
+		
+		
 
 		foreach($channels->result_array() as $channel)
 		{
@@ -129,6 +140,8 @@ class Taxonomy_mcp
 		// get the member groups available
 		$this->EE->load->model('member_model');
 		$member_groups = $this->EE->member_model->get_member_groups();
+		
+		
 		
 		$vars['member_groups'] = array();
 		
@@ -334,8 +347,7 @@ class Taxonomy_mcp
 		}
 
 		// get all channels
-		$this->EE->load->model('channel_model');
-		$channels = $this->EE->channel_model->get_channels($this->site_id);
+		$channels = $this->EE->mpttree->get_channels($this->site_id);
 		foreach($channels->result_array() as $channel)
 		{
 			$vars['channels'][$channel['channel_id']] = $channel['channel_title'];
@@ -398,7 +410,7 @@ class Taxonomy_mcp
 
 		$selected_templates_where 	= array("template_id" => $templates['selected']);
 		$vars['templates'] = $this->generate_template_select_array($selected_templates_where);
-		$channels = $this->EE->channel_model->get_channels($this->site_id);
+		$channels = $this->EE->mpttree->get_channels($this->site_id);
 		$site_pages = $this->EE->config->item('site_pages');
 		
 		// are we editing a node? if so fetch the node values

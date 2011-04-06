@@ -80,6 +80,7 @@ $lang = array(
 "root_node_notice"				=> '<h3>Please insert a root node<br /><small>All Taxonomy trees must have a root node</small></h3>',
 "field_notice"					=> 'Please note: Changing a \'Field Name\' will not update already existing values if they have been entered.',
 "member_preferences"			=> '<strong>Member preferences</strong><br />Which member groups have access to this tree via the module interface. (Super Admins always have access)',
+"no_trees_assigned"				=> 'You currently don\'t have permission to manage any Taxonomy trees.',
 //
 ''=>''
 );

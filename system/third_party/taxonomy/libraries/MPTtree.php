@@ -2918,6 +2918,19 @@ function get_parents_crumbs($lft,$rgt){
 		}
 
 	}
+	
+	
+	/**
+	 * Get Channels
+	 */
+	function get_channels($site_id = NULL)
+	{
+		$site_id = $this->EE->config->item('site_id');
+		$this->EE->db->select('channel_title, channel_name, channel_id, cat_group, status_group, field_group');
+		$this->EE->db->where('site_id', $site_id);
+		$this->EE->db->order_by('channel_title');
+		return $this->EE->db->get('channels'); 
+	}
     
  
  
