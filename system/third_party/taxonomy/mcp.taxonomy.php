@@ -532,8 +532,9 @@ class Taxonomy_mcp
 		// print_r($tree_settings);
 		
 		$vars['tree_id'] = $tree_id;
-		$vars['update_action'] = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=taxonomy'.AMP.'method=reorder_nodes'.AMP.'tree_id='.$tree_id;
+		$vars['update_action'] = $this->form_base.AMP.'method=reorder_nodes'.AMP.'tree_id='.$tree_id;
 		$vars['ajax_update_action'] = str_replace("&amp;", "&", $vars['update_action']);
+		
 		
 		$vars['theme_base'] = $this->theme_base;
 		
@@ -568,7 +569,8 @@ class Taxonomy_mcp
 	 */
 	function reorder_nodes()
 	{
-
+		
+		
 		$tree_id = $this->EE->input->get_post('tree_id');
 
 		$this->validate_and_initialise_tree($tree_id);

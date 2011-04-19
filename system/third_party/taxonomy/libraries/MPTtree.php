@@ -2632,6 +2632,11 @@ function get_parents_crumbs($lft,$rgt){
 		{
 			$this->EE->session->cache['taxonomy_node_count'] = 1;
 		}
+		
+		if (! isset($this->EE->session->cache['taxonomy_node_previous_level']))
+		{
+			$this->EE->session->cache['taxonomy_node_previous_level'] = 0;
+		}
 
 		$str = '';
 		$ul_id = '';
@@ -2824,9 +2829,13 @@ function get_parents_crumbs($lft,$rgt){
 											'node_level' => $data['level'],
 											'node_level_count' => $level_count,
 											'node_level_total_count' => $level_total_count,
-											'node_count' => $options['node_count']
+											'node_count' => $options['node_count'],
+											'node_previous_level' => $this->EE->session->cache['taxonomy_node_previous_level'],
+											'node_previous_level_diff' => $this->EE->session->cache['taxonomy_node_previous_level'] - $data['level']
 											);
 						
+						// update with our new level
+						$this->EE->session->cache['taxonomy_node_previous_level'] = $data['level'];
 						
 						$custom_fields = (isset($data['extra'])) ? unserialize($data['extra']) : NULL;
 						
@@ -2890,7 +2899,7 @@ function get_parents_crumbs($lft,$rgt){
            
         $str = $opening_ul.$str.$closing_ul;
         
-        
+      
         
    	 	return $str;
     }

@@ -191,13 +191,18 @@ class Taxonomy {
 		}
 
 		$tree_array = $this->EE->mpttree->tree2array_v2($options['root'], $options['root_entry_id'], $options['root_node_id']);
-
+		
 		$r = $this->EE->mpttree->build_list($tree_array, $str, $options);
 		
 		// unset the node_count incase multiple trees are being output
 		if (isset($this->EE->session->cache['taxonomy_node_count']))
 		{
 			$this->EE->session->cache['taxonomy_node_count'] = 1;
+		}
+		// ditto with prev level counter
+		if (isset($this->EE->session->cache['taxonomy_node_previous_level']))
+		{
+			$this->EE->session->cache['taxonomy_node_previous_level'] = 0;
 		}
 		
 		return $r;
@@ -222,8 +227,8 @@ class Taxonomy {
 										'id' => 'node_id',
 										'title' => 'label'));
 										
-		$node_id 		= $this->EE->TMPL->fetch_param('node_id');
-		$node_entry_id 	= $this->EE->TMPL->fetch_param('node_entry_id');
+		$node_id 		= (int) $this->EE->TMPL->fetch_param('node_id');
+		$node_entry_id 	= (int) $this->EE->TMPL->fetch_param('entry_id');
 		$data = array();
 		
 		if(!$node_id && !$node_entry_id)
