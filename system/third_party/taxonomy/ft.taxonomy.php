@@ -661,6 +661,8 @@
 		}
 		
 		
+		/* take this out for now @todo
+		
 		// when an entry is deleted, we need to loop through each of our taxonomy trees, and remove
 		// any nodes/branches which contain our entries...
 		function delete($ids)
@@ -697,7 +699,7 @@
 			}
 					
 		}
-		
+		*/
 		
 		// sets the last_updated timestamp for a tree
 		private function set_last_update_timestamp($tree_id)
