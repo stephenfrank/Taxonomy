@@ -661,6 +661,44 @@
 		}
 		
 		
+		// when an entry is deleted, we need to loop through each of our taxonomy trees, and remove
+		// any nodes/branches which contain our entries...
+		function delete($ids)
+		{
+			
+						
+			// action each entry id
+			foreach($ids as $entry_id)
+			{
+				// and we have to loop though each tree to check for each entry
+				$tree_query = $this->EE->db->get_where('exp_taxonomy_trees',array('site_id' => $this->EE->config->item('site_id')));
+
+				if($tree_query->num_rows() > 0)
+				{
+					foreach ($tree_query->result_array() as $tree)
+					{
+						
+						$mpttree = new MPTtree;
+						$tree_id = $tree['id'];
+						$mpttree->set_opts(array( 'table' => 'exp_taxonomy_tree_'.$tree_id,
+										'left' => 'lft',
+										'right' => 'rgt',
+										'id' => 'node_id',
+										'title' => 'label'));
+						
+						$this_node = $mpttree->get_node_by_entry_id($entry_id);
+						
+						// might as well nuke the branch?
+						$mpttree->delete_branch($this_node['lft']);
+
+					}
+				}
+			
+			}
+					
+		}
+		
+		
 		// sets the last_updated timestamp for a tree
 		private function set_last_update_timestamp($tree_id)
 		{

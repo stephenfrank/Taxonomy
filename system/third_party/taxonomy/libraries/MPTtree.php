@@ -2736,6 +2736,7 @@ function get_parents_crumbs($lft,$rgt){
 								$data['rgt'] <= $this->act_lev[($data['level']-1)]['act_rgt']
 								)
 							)
+							|| $data['level'] <= $options['active_branch_start_level']
 						)
 					{
 						
@@ -3027,6 +3028,78 @@ function get_parents_crumbs($lft,$rgt){
 	}
 	
 	
+	
+	
+	 /*
+     * Added by fcco:
+     * -----------------------------------------------------------------------------
+     * This function iterates through the tree until the right start level is found.
+     * If this is the case, go search this subset for the required entry_id.
+     * When found, return this branch. Uses self-recursion.
+     */
+    function _find_in_tree($tree, $id, $depth, $start_level=FALSE)
+    {
+        foreach($tree as $item)
+        {
+            if($item['level'] === $start_level || $start_level === FALSE)
+            {
+                if($this->_find_in_subset($item, $id, $depth))
+                    return $item;
+            }
+            else
+            {
+                if($item['level'] < $start_level || $start_level === FALSE)
+                {
+                    if(isset($item['children']))
+                    {
+                        $result = $this->_find_in_tree($item['children'], $id, $depth, $start_level);
+
+                        // keep searching sublevels until hit
+                        if($result !== FALSE)
+                            return $result;
+                    }
+                }
+            }
+        }
+
+        return FALSE;
+    }
+
+    /*
+     * Added by fcco:
+     * -----------------------------------------------------------------------------
+     * This function finds an entry inside a subset, uses self-recursion.
+     */
+    function _find_in_subset(&$item, $id, $depth)
+    {
+        if($item['level'] > $depth)
+            return FALSE;
+
+        if(isset($item['entry_id']) && $item['entry_id'] == $id)
+            return TRUE;
+        else
+        {
+            if(isset($item['children']))
+            {
+                $found = FALSE;
+
+                foreach($item['children'] as $child)
+                {
+                    if($this->_find_in_subset($child, $id, $depth))
+                        $found=TRUE;
+                }
+
+                return $found;
+            }
+            else
+                return FALSE;
+        }
+    }
+
+
+
+
+
 	
 	
 	// http://www.dotvoid.com/2007/09/reordering-nested-sets-using-php-and-javascript/

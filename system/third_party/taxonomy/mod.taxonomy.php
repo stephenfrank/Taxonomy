@@ -159,6 +159,7 @@ class Taxonomy {
 		$options['node_active_class']  	= ($this->EE->TMPL->fetch_param('node_active_class')) ? $this->EE->TMPL->fetch_param('node_active_class') : "active";
 		$options['entry_status']  	= ($this->EE->TMPL->fetch_param('entry_status')) ? explode('|', $this->EE->TMPL->fetch_param('entry_status')) : array('open');
 		$options['style']  			= ($this->EE->TMPL->fetch_param('style')) ? $this->EE->TMPL->fetch_param('style') : "nested";
+		$options['active_branch_start_level'] = ($this->EE->TMPL->fetch_param('active_branch_start_level')) ? intval($this->EE->TMPL->fetch_param('active_branch_start_level')) : FALSE;
 
 		// if we've got a url title, set the root_entry_id var by
 		// doing a quick lookup for that entry - added by Todd Perkins
@@ -192,7 +193,19 @@ class Taxonomy {
 
 		$tree_array = $this->EE->mpttree->tree2array_v2($options['root'], $options['root_entry_id'], $options['root_node_id']);
 		
+		
+		
+		if($options['entry_id'] && $options['entry_id'] != "{entry_id}" && $options['active_branch_start_level'] > 0)
+        {
+        	
+            $tree_array = array($this->EE->mpttree->_find_in_tree($tree_array, $options['entry_id'], $options['depth'],$options['active_branch_start_level']));
+        }
+		
+		
+		
+		
 		$r = $this->EE->mpttree->build_list($tree_array, $str, $options);
+		
 		
 		// unset the node_count incase multiple trees are being output
 		if (isset($this->EE->session->cache['taxonomy_node_count']))

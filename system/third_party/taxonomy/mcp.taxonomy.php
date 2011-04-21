@@ -533,11 +533,7 @@ class Taxonomy_mcp
 		
 		$vars['tree_id'] = $tree_id;
 		$vars['update_action'] = $this->form_base.AMP.'method=reorder_nodes'.AMP.'tree_id='.$tree_id;
-		$vars['ajax_update_action'] = str_replace("&amp;", "&", $vars['update_action']);
-		
-		
-		$vars['theme_base'] = $this->theme_base;
-		
+		$vars['theme_base'] = $this->theme_base;	
 		$vars['title_extra'] = $tree_settings['label'];
 
 		// add our css/js
@@ -569,11 +565,11 @@ class Taxonomy_mcp
 	 */
 	function reorder_nodes()
 	{
-		
-		
+
 		$tree_id = $this->EE->input->get_post('tree_id');
 
 		$this->validate_and_initialise_tree($tree_id);
+		
 		$tree_settings =  $this->get_tree_settings($tree_id);
 		
 		$sent_last_updated = $this->EE->input->get_post('last_updated');
@@ -665,17 +661,16 @@ class Taxonomy_mcp
 	{
 	
 		$tree_id = $this->EE->input->post('tree_id');
-		$node_id = ($this->EE->input->post('node_id')) ? $this->EE->input->post('node_id') : '';
-		$is_root = ($this->EE->input->post('is_root')) ? $this->EE->input->post('is_root') : '';
+		$node_id = $this->EE->input->post('node_id');
+		$is_root = $this->EE->input->post('is_root');
+		$extra 	 = $this->EE->input->post('extra');
 		
 		$this->validate_and_initialise_tree($tree_id);
 		
 		$parent_node_id = $this->EE->input->post('parent_node_node_id');
 		
 		$label = htmlspecialchars($this->EE->input->post('label'), ENT_COMPAT, 'UTF-8');
-		
-		$extra = $this->EE->input->post('extra');
-		
+
 		if($extra)
 		{
 			$extra = $this->EE->security->xss_clean($extra);
@@ -749,7 +744,7 @@ class Taxonomy_mcp
 	}
 	
 	
-		// delete an entire branch (combine with above function when not 2am).
+	// delete an entire branch (combine with above function when not 2am).
 	function delete_branch()
 	{
 		$tree_id = $this->EE->input->get('tree_id');
@@ -820,7 +815,9 @@ class Taxonomy_mcp
 	
 	
 	
-	// adds Taxonomy css and js to the head of the cp
+	/**
+	 * adds Taxonomy css and js to the head of the cp
+	 */
 	private function _add_taxonomy_assets()
 	{
 		$this->EE->cp->add_to_head('<link type="text/css" href="'.$this->theme_base.'css/taxonomy.css" rel="stylesheet" />');
@@ -884,12 +881,10 @@ class Taxonomy_mcp
 		
 	}
 	
-	
-	
-	
-	
-	
-	
+
+	/*
+	 * receives a page entry id and returns true json response if the entry has a page_uri
+	 */
 	function check_entry_has_pages_uri()
 	{
 
@@ -922,9 +917,10 @@ class Taxonomy_mcp
 	}
 	
 	
-	
-	// if a tree id is not passed via a get or the tree id doesn't exist, thrown an error
-	// set opts on mpttree
+	/*
+	 * validate tree exists, checks user permissions
+	 * set opts on mpttree
+	 */ 
 	private function validate_and_initialise_tree($tree_id = NULL)
 	{
 		// check the tree is being passed
@@ -967,26 +963,22 @@ class Taxonomy_mcp
 	}
 	
 
-	
-	// sets the last_updated timestamp for a tree
+	/*
+	 * sets the last_updated timestamp for a tree
+	 * required as nested set can get real screwed if multiple folks are editing
+	 */ 
 	private function set_last_update_timestamp($tree_id)
 	{
 		$id = (isset($tree_id)) ? $tree_id : 0;
-		
     	$time = time();
-    	
-		$data = array(
-		   'last_updated' => $time
-		);
-		
+		$data = array('last_updated' => $time);
 		$this->EE->db->where('id', $id);
 		$this->EE->db->update('exp_taxonomy_trees', $data);
-
-
 	}
 	
-	
-	// returns a tree's properties/preferences
+	/*
+	 * returns a tree's properties/preferences
+	 */ 
 	private function get_tree_settings($tree_id)
 	{
 		$id = (isset($tree_id)) ? $tree_id : 0;
