@@ -2863,9 +2863,12 @@ function get_parents_crumbs($lft,$rgt){
 						}
 						
 						$level = $data['level'];
+						
+						$first_class = ($level_count == 1 && $level) ? 'first_child' : '';
+						$last_class = ($level_count == $level_total_count && $level) ? 'last_child' : '';
 
 						// build our node class and remove any extra spaces
-						$node_class = preg_replace('/\s\s+/', ' ', "node_$unique_class level_$level $children_class $active_parent $active");
+						$node_class = preg_replace('/\s\s+/', ' ', "node_$unique_class level_$level $children_class $active_parent $active $first_class $last_class");
 						
 						// get rid of any space on the end
 						$node_class = rtrim($node_class, " ");
