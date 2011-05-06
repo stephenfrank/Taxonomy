@@ -2,7 +2,7 @@
 
 ### Overview
 
-The Taxonomy Module is a navigation/breadcrumb building tool for 'page' sections of your site. The module uses nested sets to control hierarchy and utilises the MPTtree library from the CodeIgniter community.
+The Taxonomy Module is a navigation/breadcrumb building tool for 'page' sections of your site.
 
 Taxonomy lets you build navigation trees to unlimited depths which comprise of any of the following types of links:
 
@@ -10,7 +10,7 @@ Taxonomy lets you build navigation trees to unlimited depths which comprise of a
 2. Build links in your tree from entries using page uris from the EE Pages Module
 3. Or enter a url override to build nodes in your tree that link to anywhere you like
 
-The module comes bundled with a fieldtype to allow publishers to insert menu items directly from the publish page.
+The module comes bundled with a field-type to allow publishers to insert menu items directly from the publish page.
 
 Taxonomy allows you to create as many trees as you need to handle multiple menus.
 
