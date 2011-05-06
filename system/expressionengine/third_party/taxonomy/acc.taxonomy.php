@@ -1,4 +1,16 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Taxonomy Accessory
+ *
+ * @package		ExpressionEngine
+ * @subpackage	Addons
+ * @category	Accessory
+ * @author		Iain Urquhart
+ * @link		http://iain.co.nz
+ */
+ 
+
 class Taxonomy_acc {
 
 	var $name			= 'Taxonomy Accessory';
@@ -62,4 +74,5 @@ class Taxonomy_acc {
 	}
 	
 }
-// END CLASS
+/* End of file acc.taxonomy.php */
+/* Location: /system/expressionengine/third_party/taxonomy/acc.taxonomy.php */

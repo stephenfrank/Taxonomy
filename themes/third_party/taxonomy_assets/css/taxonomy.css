@@ -3,7 +3,22 @@
 .taxonomy-content {
 	padding-bottom: 20px;
 	font-family: Helvetica, Arial, sans-serif;
-	margin: 10px 20px;
+	margin: 10px;
+	line-height: 1.2;
+}
+
+.taxonomy-content td {height: 24px;}
+
+
+#taxonomy-wapper .cp_button {margin-left: 0;}
+#taxonomy-wapper .cp_button a:link, 
+#taxonomy-wapper .cp_button a:visited {
+padding: 8px 20px;
+border-radius: 40px;
+text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+border: 1px solid rgba(0,0,0,0.1);
+
+
 }
 
 #mainContent .taxonomy-content p {margin-bottom: 15px;}
@@ -22,7 +37,10 @@
 .taxonomy-error {padding: 30px; margin: 30px;}
 
 ol#taxonomy-list,
-ol#taxonomy-list ol {list-style-type: none;}
+ol#taxonomy-list ol {list-style-type: none; 
+-moz-user-select: none;
+   -khtml-user-select: none;
+   user-select: none;}
 
 ol#taxonomy-list li div.item-wrapper,
 #taxonomy-list-container h3,
@@ -30,17 +48,24 @@ ol#taxonomy-list .placeholder,
 ol#taxonomy-list .item-options a.delete-node,
 #taxonomy-add-node-container,
 #save-taxonomy {
-	-webkit-box-shadow: 0 0 3px rgba(0,0,0, 0.1);
+	-webkit-box-shadow: 1px 1px 3px rgba(0,0,0, 0.15);
 	-webkit-border-radius: 5px;
 	
-	-moz-box-shadow: 0 0 3px rgba(0,0,0, 0.1);
+	-moz-box-shadow:1px 1px 3px  rgba(0,0,0, 0.15);
 	-moz-border-radius: 5px;
 	
-	box-shadow: 0 0 3px rgba(0,0,0, 0.1);
+	box-shadow: 1px 1px 3px  rgba(0,0,0, 0.15);
 	border-radius: 5px;
 }
-#taxonomy-list-container h3 em.status_indicator, 
-ol#taxonomy-list li div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 7px; width: 5px; height: 5px; border: 5px solid transparent; overflow: hidden; display: block; text-indent: -1000px; opacity: 0.6; 
+
+ol#taxonomy-list li.ui-sortable-helper div.item-wrapper {
+-webkit-box-shadow: 0px 0px 4px rgba(0,0,0, 0.25);
+-moz-box-shadow: 0px 0px 4px rgba(0,0,0, 0.25);
+box-shadow: 0px 0px 4px rgba(0,0,0, 0.23);
+}
+
+ol#taxonomy-list li div.item-wrapper em.status_indicator,
+h3 div.item-wrapper em.status_indicator {position: absolute; left: 24px; top: 8px; width: 5px; height: 5px; border: 5px solid transparent; overflow: hidden; display: block; text-indent: -1000px; opacity: 0.6; 
 -moz-background-clip: border; /* Firefox 3.6 */
 -webkit-background-clip: border; /* Safari 4? Chrome 6? */
 background-clip: border-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
@@ -49,11 +74,13 @@ background-clip: border-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
 background-clip: padding-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
 -moz-background-clip: content; /* Firefox 3.6 */
 -webkit-background-clip: content; /* Safari 4? Chrome 6? */
-background-clip: content-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */}
+background-clip: content-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+
+h3 div.item-wrapper em.status_indicator {left: 1px;}
+
 ol#taxonomy-list li div.item-wrapper:hover  em.status_indicator {opacity: 1}
 ol#taxonomy-list li div.item-wrapper em.status_indicator:hover{ }
-
-#taxonomy-list-container h3 em.status_indicator {left: 2px; background: yellow;}
 
 #mainContent .taxonomy-content #save-taxonomy {
 	padding-left: 10px;
@@ -63,10 +90,7 @@ ol#taxonomy-list li div.item-wrapper em.status_indicator:hover{ }
 	clear: both;
 }
 
-#mainContent .contents .pageContents .taxonomy-content .taxonomy-advanced-settings {
-	padding: 20px !important;
-	background: #fff;
-}
+
 
 input.taxonomy-field-input {width: 90%; min-width: 250px;}
 input.taxonomy-number-input {width: 20px;}
@@ -133,7 +157,7 @@ ol#taxonomy-list li a:hover,
 #taxonomy-list-container h3,
 ol#taxonomy-list li div.item-wrapper,
 #save-taxonomy {
-	padding: 8px 8px 8px 40px; 
+	padding: 9px 8px 9px 40px; 
 	margin: 5px 0; 
 	position: relative;
 	text-shadow: 0 1px 0 #fff;
@@ -149,7 +173,7 @@ ol#taxonomy-list li div.item-wrapper:hover,
 ol#taxonomy-list li div.item-handle {
 	display: block; width: 20px; height: 20px; 
 	background: url(../gfx/drag_handle.png) no-repeat 3px 3px; 
-	position: absolute; left: 5px; top: 5px;
+	position: absolute; left: 5px; top: 6px;
 	
 }
 
@@ -165,8 +189,11 @@ ol#taxonomy-list.taxonomy_update_underway:hover {
 cursor: wait;
 }
 
-ol#taxonomy-list li div.item-handle:hover,
-.ui-sortable-helper:active {cursor: move;}
+ol#taxonomy-list li div.item-handle:hover {cursor: url(../gfx/hand_open.png), move;}
+
+.ui-sortable-helper:active,
+ol#taxonomy-list li div.item-handle:active,
+ol#taxonomy-list li div.item-handle:focus { cursor: url(../gfx/hand_closed.png), move;}
 
 ol#taxonomy-list a.item-label {color: #fff;}
 
@@ -194,10 +221,10 @@ ol#taxonomy-list .ui-nestedSortable-error {
 ol#taxonomy-list .item-options {	
 	position: absolute; 
 	right: 0px; top: 0px;
-	padding: 9px 9px 9px 15px;
+	padding: 10px 9px 10px 15px;
 	display: none;
 	font-size: 10px;
-	background: #fff url(../gfx/item.png) repeat-x 0 100%;
+	background: #fff url(../gfx/item.png) repeat-x 100% 100%;
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border-left: 1px solid #f6f6f6;
@@ -255,10 +282,27 @@ table.taxonomy-table td input {border: 1px solid #e4e4e4;}
 
 
 
+#mainContent .contents .pageContents .taxonomy-content .taxonomy-advanced-settings {
+	padding: 20px 10px 10px !important;
+	background: #fff;
+	margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.15);
+}
+#mainContent .contents .pageContents .taxonomy-content .taxonomy-advanced-settings h3 {margin-bottom: 0;}
+
+p#notice_counts {display: inline-block;}
+
+
+#taxonomy_select_entry {display: inline-block;}
 
 
 
 
 
-
+/* fieldtype */
+.taxonomy_fetch_title { padding: 0 2px; font-weight: bold; background: #fff; color: #bababa; padding: 0 3px; border-radius: 3px; -webkit-box-shadow: 0 1px 1px rgba(0,0,0, 0.2); margin-left: 3px;}
+					.taxonomy_fetch_title:hover {cursor: pointer;}
+					.taxonomy_table {margin-top: 7px;}
+					.taxonomy_table tr td { height: 23px;}
+					.taxonomy_table tr td.taxonomy_crumb_holder {background: #FDFCD1;}
+					.taxonomy_table th:hover {cursor: default !important;}
 

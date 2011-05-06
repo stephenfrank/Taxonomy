@@ -1,15 +1,22 @@
-<script type="text/javascript" src="<?=$theme_base?>js/jquery-ui-1.8.2.custom.min.js"></script>
-<script type="text/javascript" src="<?=$theme_base?>js/jquery.ui.nestedSortable.js"></script>
-<script type="text/javascript" src="<?=$theme_base?>js/jquery.serialize-list.js"></script>
+<script type="text/javascript" src="<?=$_theme_base_url?>js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="<?=$_theme_base_url?>js/jquery.ui.nestedSortable.js"></script>
+<script type="text/javascript" src="<?=$_theme_base_url?>js/jquery.serialize-list.js"></script>
+<script type="text/javascript" src="<?=$_theme_base_url?>js/taxonomy.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		
+		// fix for stoopid cursor bug
+		// http://forum.jquery.com/topic/chrome-text-select-cursor-on-drag
+		this.onselectstart = function () { return false; };
+		
 
-		$('ol#taxonomy-list').nestedSortable({	
+		$('ol#taxonomy-list').nestedSortable(
+		{	
 			disableNesting: 'no-nest',
 			forcePlaceholderSize: true,
 			handle: 'div.item-handle',
 			items: 'li',
-			opacity: .95,
+			opacity: .92,
 			placeholder: 'placeholder',
 			tabSize: 25,
 			tolerance: 'pointer',
@@ -20,26 +27,29 @@
 		// fix the tree height to prevent any 'jumping'
 		$('ol#taxonomy-list').height($('ol#taxonomy-list').height());
 
-		$( "ol#taxonomy-list" ).bind( "sortupdate", function(event, ui) {
+		$( "ol#taxonomy-list" ).bind( "sortupdate", function(event, ui) 
+		{
 		
 			$('ol#taxonomy-list').addClass('taxonomy_update_underway');
 		
 			serialized = $('ol#taxonomy-list').nestedSortable('toArray', {startDepthCount: 1});
 			var taxonomy_order = ''
-			for(var item in serialized) {
+			for(var item in serialized) 
+			{
 				var value = serialized[item];
 				// console.log('myVar: ', value);
 				taxonomy_order += 'id:' + value['item_id'] + ',lft:' + value['left'] + ',rgt:' + value['right'] + '|';
 			}
+			
 			$('#save-taxonomy input.taxonomy-serialise').val(taxonomy_order);
 			
 			// prep our vars for posting
-			var $form = $('#save-taxonomy form'),
-				p_XID 			= $form.find( 'input[name="XID"]' ).val(),
-		        p_tree_id 		= $form.find( 'input[name="tree_id"]' ).val(),
+			var $form 				= $('#save-taxonomy form'),
+				p_XID 				= $form.find( 'input[name="XID"]' ).val(),
+		        p_tree_id 			= $form.find( 'input[name="tree_id"]' ).val(),
 		        p_taxonomy_order 	= $form.find( 'input[name="taxonomy_order"]' ).val(),
-		        p_last_updated 	= $form.find( 'input[name="last-updated"]' ).val(),
-		        url = $form.attr( 'action' );
+		        p_last_updated 		= $form.find( 'input[name="last-updated"]' ).val(),
+		        url					= $form.attr( 'action' );
 	
 		    	// Send the data using post
 		    	$.post( url, { 'XID': p_XID, 'tree_id': p_tree_id, 'taxonomy_order': p_taxonomy_order, 'last_updated': p_last_updated},
@@ -61,22 +71,25 @@
 			          	
 			          	// remove the updator indicator
 			          	$('ol#taxonomy-list').removeClass('taxonomy_update_underway');
+			          	
+			          	$.ee_notice("Tree order updated", {type: 'success'});
 		          	
 		     		}, "json");
-		      
-		     	
-			
-				$.ee_notice("Tree order updated", {type: 'success'});
 
+				
+				
 		});
 
 	});
 </script>
+
 <div id="taxonomy-wapper">
 
-	<div id="taxonomy-add-node-container"><div class="inset">
-		<a href="<?=$_base?>&amp;method=manage_node&amp;tree_id=<?=$tree_id?>" class="add-node close">Add a node</a>
-	</div></div>
+	
+	<div class="cp_button">
+		<a href="<?=$_base_url?>&amp;method=manage_node&amp;tree_id=<?=$tree_id?>" class="add-node close">Add a node</a>
+	</div>
+
 	
 	<div id="taxonomy-list-container">
 		<?=$taxonomy_list?>

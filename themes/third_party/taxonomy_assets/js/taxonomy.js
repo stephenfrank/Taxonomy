@@ -117,7 +117,7 @@ $(document).ready(function() {
 		    }
 	});	
 	
-	$('.taxonomy-select-entry select').live('change', function() {
+	$('#taxonomy_select_entry select').live('change', function() {
 		
 		$(this).detectPageURI();
 	});
@@ -144,7 +144,8 @@ $(document).ready(function() {
 		} 
 	);
 	
-	$('em.status_indicator').tipsy({fade: true, gravity: 'n'});
+	$('em.status_indicator').tipsy({fade: true, gravity: 's'});
+	$('.taxonomy_help').tipsy({fade: true, gravity: 's'});
 	
 	
 	
